@@ -1,0 +1,197 @@
+set year = "year"
+set observationID = "obsID"
+set data_path = "path"
+set output_directory = "output_dir"
+
+ensure output_directory exists
+
+Define event and lightcurve_correction_file paths:
+    barycenter_corrected_event_path = path
+    event_file_a = "path"
+    event_file_b = "path"
+    lightcurve_correction_fileA= "path"
+    lightcurve_correction_fileA= "path"
+
+Define energy parameters:
+    energy_minimum = number_keV
+    energy_maximum = number_keV
+
+If one module missing:
+    copy avalible module's event files
+
+Load GTI (good time intervals) for both modules A and B:
+    def load_gti_file(event_file);
+        for modules A and B:
+            read GTI table from event file
+        return GTIA, GTIB
+
+Load event lists for both modules A and B
+    def load_event_file(event_file);
+        for modules A and B:
+            read event table from event file
+        return event_timesA, event_energyA, event_timesB, event_energyB
+
+Apply barycenter correction 
+    def barycorr(barycorr_event, event_file, GTI);
+        for modules A and B:
+            shift events table and GTI table times by barycenter correction amount
+        return event_fileA, GTIA, event_fileB, GTIB,
+
+Filter energy
+    def filter_events_by_energy(events, energy_min, energy_max):
+        for modules A and B:
+            keep events within energy range
+        return filtered_eventsA, filtered_eventsB
+    
+    save filtered_events.csv to output_directory
+
+Clean GTIs
+    set gti_trim_threshold = 30 sec (minimum length of GTI)
+    set gti_start_trim = 15 sec (how many seconds to trim at start of GTI)
+    set gti_stop_trim = 15 sec (how many seconds to trim at end of GTI)
+
+    def clean_gti(GTI, filtered_events, gti_trim_threshold, gti_start_trim, gti_stop_trim):
+        for modules A and B:
+            trim GTI start and stop times
+            delete GTIs below threshold
+        return clean_gtis
+    save clean_gtis.csv to output_directory
+
+Merge GTIs
+    def merge_gti(clean_gti_A, clean_gti_B):
+        merge GTIs from A and B into one GTI table with overlapping GTIs
+    return merged_gti
+
+    save merged_gti.csv to output_directory
+
+Filter events from common GTI
+    def filter_events_with_common_gti(filtered_events, merged_gti):
+        for modules A and B:
+            delete events not within common GTI start and stop times
+    return filtered_eventsA, filtered_eventsB
+
+    save filtered_eventsA.csv to output_directory
+    save filtered_eventsB.csv to output_directory
+
+Get correction factors (essentially event error)
+    def get_event_corr_factor(lightcurve_correction_file, filtered_eventsA["TIME"]):
+        for modules A and B:
+            grab the correction column from the correction factor table in lightcurve_correction_file
+            merge into dataframe with filtered_eventsA["TIME"]
+    return filtered_eventsA with correction factor column, filtered_eventsB with correction factor column
+
+    save filtered_eventsA with correction factor column.csv to output_directory
+    save filtered_eventsB with correction factor column.csv to output_directory
+
+Merge photon events
+    if only one module of data:
+        def empty_dataframe(duplicated events file):
+            make duplicated events file empty
+        return duplicated events file
+    
+    def merge_events(filtered_eventsA, filtered_eventsB):
+        merge all events in time order to make one dataframe
+    return merged_events
+
+    if only one module of data:
+        drop NAN values from merged_events
+
+    save merged_events.csv to output_directory
+
+Calculate average count rates
+    def calculate_average_rates(events_merged, merged_gti):
+        calculate average count rates within GTIs using events
+    return average_rates
+
+    save average_rates.csv to output_directory
+
+Remove time gaps between GTIs and events (BBA requires continuous time intervals)
+    original_time_stop = max time of merged_gti
+
+    def suppress_gti_gaps(events_merged, merged_gti):
+        remove time gaps between GTIs but store times removed 
+    return events_no_gaps, cumulative_gaps
+
+    save events_no_gaps.csv to output_directory
+
+    make cumulative_gaps into a dataframe
+    save cumulative_gaps.csv to output_directory
+
+Bayesian block analysis
+    set false_positive rate = 0.01 (used in literature)
+    number_of_change_point_prior = 4 - np.log10(
+        fp_rate / (0.0136 * (length(events_no_gaps) ** 0.478))
+    ) #again used in previous literature
+    
+    exposure_list=events_no_gaps["Exposure"]
+
+    def find_blocks(events_no_gaps, fp_rate, number_of_change_point_prior):
+        perform bayesian block analysis on data to determine change points
+    return baysian_blocks_dataframe
+
+    save baysian_blocks_dataframe.csv to output_directory
+
+Put time gaps back into event data
+    def insert_gti_gaps(baysian_blocks_dataframe, merged_gti):
+        correct baysian_blocks_dataframe such that times are true observation times again
+    return corrected_baysian_block_df
+
+    save corrected_baysian_block_df.csv to output_directory
+
+Validate corrrected BBA blocks
+    def validate_blocks(corrected_bba_blocks, events_merged):
+        check if end of corrected_bba_blocks = end of events_merged
+    return pass or fail
+
+Save Bayesian Block results
+    def calculate_event_counts_and_rates(corrected_bba_blocks, events_merged):
+        calculate count rates within blocks
+    return corrected_bba_blocks, flare_blocks
+
+    def calculate_confidence_limits(corrected_bba_blocks):
+        calculate 1 sigma upper and lower limits for the count rates of the blocks
+    return corrected_bba_blocks
+
+   analysis_parameters = {number_of_change_point_prior, false_positive}
+
+    def save_flare_results_txt(flare_blocks, analysis_parameters, output_directory):
+        format the change point times, count rates, upper and lower limits into final txt file
+    return formated txt file
+
+    save formated txt file.txt to output_directory
+
+Generate lightcurve
+    binsize = 100 sec 
+    energy_range = (lower_keV, upper_keV) #could be different from analysis range
+    
+    def generate_lightcurve(events_merged, merged_gti, binsize, energy_range):
+        filter events for specified energy range and generate regularly binned light curves 
+    return lightcurve_dataframe
+
+    save lightcurve_dataframe.csv to output_directory
+
+Plot lightcurve
+    def plot_prep(corrected_bba_blocks, flare_blocks):
+        get count rates and GTIs in good plotable format
+    return plot_dataframe
+
+    def plot_lightcurve(lightcurve_dataframe, plot_dataframe):
+        convert nustar time to UTC, plot count rate averages, upper and lower limits, and light curve
+    return lightcurve plot
+
+Create ReadMe with metadata
+    flag_dictionary = {        "Barycenter correction" : 'True',
+        "BBA min energy" : energy_min,
+        "BBA max energy" : energy_max, 
+        "plotting energy range": energy_range,
+        "input event file A" : event_file_a,
+        "input event file B" : event_file_b,
+        "input lccorr file A": lccorrfileA,
+        "input lccorr file B": lccorrfileB   
+    }
+
+    def write_readme(flag_dictionary):
+        take flag_directory and make into txt file
+
+    return ReadMe
+    save ReadMe.txt to output_directory
