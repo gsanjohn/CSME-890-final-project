@@ -1,0 +1,3 @@
+[submodule "BBA_Conversion"]
+	path = BBA_Conversion
+	url = https://github.com/MSU-X-Ray-Astronomy-Group/BBA_Conversion.git
