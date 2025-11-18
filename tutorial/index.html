@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Tutorials - CMSE 890 Final Project</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">CMSE 890 Final Project</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../explain/" class="nav-link">Explanation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../howto/" class="nav-link">How-To Install</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Tutorials</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">API reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../API_homepage/" class="dropdown-item">API</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../howto/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../API_homepage/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#using-the-bayesian-block-routine" class="nav-link">Using the Bayesian Block Routine</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#getting-the-data-you-need" class="nav-link">Getting the data you need</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#running-the-data" class="nav-link">Running the data</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="using-the-bayesian-block-routine">Using the Bayesian Block Routine</h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This package is designed to work exclusively with NuSTAR observations.</p>
+</div>
+<p>Here we are going to run though an example, showing how to run observation 30801024002 through the Bayesian Block routine, and how to get the files you need.</p>
+<h2 id="getting-the-data-you-need">Getting the data you need</h2>
+<p>To run this package, you will need four types of data files:</p>
+<ol>
+<li>A barycenter corrected event file</li>
+<li>Event files of the observation from FPMA, FPMB, or both (not barycenter corrected)</li>
+<li>Light curve correction files for the event files used above.</li>
+</ol>
+<p>This tutorial assumes that you have already obtained cleaned data products through NuPipeline and barycentered events and light curve correction files through NuProducts. These files are a standard part of the NuSTAR data pipeline procedure, and more information can be found in the <a href="https://heasarc.gsfc.nasa.gov/docs/nustar/analysis/nustar_swguide.pdf">NuSTAR Manual</a>.</p>
+<h3 id="event-files">Event Files</h3>
+<p>Once you have cleaned data, we can extract event files. For accurate analysis, the event files must exclusively contain data from the target of analysis. To achieve this, we can use another HEASOFT tool called XSELECT.</p>
+<p>The way we use XSELECT here is to essentially take a spatial cut out of data in the region we are interested in. For example, we can take a 30" source region centered on Sgr A * by opening the XSELECT dialogue in the command line:</p>
+<p><div class="highlight"><pre><span></span><code>xselect 
+</code></pre></div>
+XSELECT will then launch and you will be prompted to enter a session name. Lets call our session tutorial:</p>
+<div class="highlight"><pre><span></span><code>                         **  XSELECT V2.5b  **
+
+
+&gt;Enter session name &gt;[xsel30916] tutorial
+</code></pre></div>
+<p>We will then enter the event data file that we want to extract information from:</p>
+<div class="highlight"><pre><span></span><code>read event nu30801024002A01_cl.evt
+</code></pre></div>
+<p>you will then be prompted to enter the event file directory. After you input the directory, it will ask to reset the mission to NUSTAR. Select yes. It will then output something like:</p>
+<p><div class="highlight"><pre><span></span><code> Notes: XSELECT set up for      NUSTAR
+ Time keyword is TIME       in units of s
+ Default timing binsize =   5.0000
+
+Setting...
+ Image  keywords   = X          Y           with binning =    1
+ WMAP   keywords   = X          Y           with binning =    1
+ Energy keyword   = PI                     with binning =    1
+
+Getting Min and Max for Energy Column...
+Got min and max for PI:     0   4095
+
+could not get minimum time resolution of the data read
+MJDREF =  5.5197000766019E+04 with TIMESYS = TDB
+ Number of files read in:            1
+
+******************** Observation Catalogue ********************
+
+Data Directory is: /data/directory/
+HK Directory is: /data/directory/
+
+
+        OBJECT      OBS_ID      DATE-OBS
+      1 SgrAstar    30801024002 2023-04-13T04:49:49
+</code></pre></div>
+We can then input our region size by giving the path and filename of the .reg region file that we want to select:</p>
+<div class="highlight"><pre><span></span><code>tutorial:NUSTAR-FPMA &gt; filter region SgrA_30ac.reg
+</code></pre></div>
+<p>Then we extract the event:</p>
+<div class="highlight"><pre><span></span><code>tutorial:NUSTAR-FPMA &gt; extract event
+</code></pre></div>
+<p>Then we can save the event:</p>
+<div class="highlight"><pre><span></span><code>save event
+</code></pre></div>
+<p>And give the output file name when prompted.</p>
+<p>When asked to use fultered events as input data file, select no.
+You must then quit the program before repeating the process for other data. You can quit the program by:</p>
+<div class="highlight"><pre><span></span><code>quit
+</code></pre></div>
+<p>and saving the session if you wish (not required).</p>
+<h2 id="running-the-data">Running the data</h2>
+<p>After you have obtained the required files, you can run it through the bayesian block routine. Do do this, you must edit some lines in the <code>main.py</code> script. </p>
+<p>For example, lets run through an example using observation ID 30801024002. This observation was taken in 2023, so I would set:</p>
+<p><div class="highlight"><pre><span></span><code>year = &quot;2023&quot;
+obsID = &quot;30801024002&quot;
+path = (&quot;path/to/prepared/files&quot;)
+
+# Define output directory
+output_dir = path + &quot;/desired_output/&quot;
+
+[.....]
+
+# Define input file paths
+barycorr_event = path + &quot;/nu&quot; + obsID + &quot;A01_cl_barycorr.evt&quot;
+event_file_a = path + &quot;/nu&quot; + obsID + &quot;A01_xselected.evt&quot;
+event_file_b = path + &quot;/nu&quot; + obsID + &quot;B01_xselected.evt&quot;
+lccorrfileA = path + &quot;/SgrA_correct_50ac_fpmA_lcsrccorrfile.fits&quot;
+lccorrfileB = path + &quot;/SgrA_correct_50ac_fpmB_lcsrccorrfile.fits&quot;
+
+# --- Define Parameters / General Used Ones ---
+energy_min = 3.0
+energy_max = 30.0
+</code></pre></div>
+With the correct names for the event files, light curve correction files, and desired energy range for analysis. </p>
+<div class="admonition tip">
+<p class="admonition-title">Using data from only one module</p>
+<p>If you are only using data from one observation module, you can comment out the filenames of the ones that you are not using. For example, if you were only using data from module A, your script might look like:
+<div class="highlight"><pre><span></span><code>year = &quot;2023&quot;
+obsID = &quot;30801024002&quot;
+path = (&quot;path/to/prepared/files&quot;)
+# Define output directory
+output_dir = path + &quot;/desired_output/&quot;
+
+[.....]
+
+# Define input file paths
+barycorr_event = path + &quot;/nu&quot; + obsID + &quot;A01_cl_barycorr.evt&quot;
+event_file_a = path + &quot;/nu&quot; + obsID + &quot;A01_xselected.evt&quot;
+#event_file_b = path + &quot;/nu&quot; + obsID + &quot;B01_xselected.evt&quot;
+lccorrfileA = path + &quot;/SgrA_correct_50ac_fpmA_lcsrccorrfile.fits&quot;
+#lccorrfileB = path + &quot;/SgrA_correct_50ac_fpmB_lcsrccorrfile.fits&quot;
+
+# --- Define Parameters / General Used Ones ---
+energy_min = 3.0
+energy_max = 30.0
+</code></pre></div></p>
+</div>
+<p>Output csv files, plots, and txt files will then be put in the output directory specified above. </p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

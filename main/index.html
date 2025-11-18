@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Main - CMSE 890 Final Project</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">CMSE 890 Final Project</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../explain/" class="nav-link">Explanation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../howto/" class="nav-link">How-To Install</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../tutorial/" class="nav-link">Tutorials</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">API reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../API_homepage/" class="dropdown-item">API</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="2"><a href="#main" class="nav-link">main</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#main.main" class="nav-link">main</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="main"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="main.main" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">main</span><span class="p">()</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Bayesian Block alorithm for use with NuSTAR data.</p>
+
+
+<details class="3-pairs-of-files-are-necessary-as-input" open>
+  <summary>3 pairs of files are necessary as input</summary>
+  <ul>
+<li>lightcurve correction factor file (produced by nuproducts)</li>
+<li>event list extracted from region of interest (produced by xselect)</li>
+<li>barycorr file to do barycenter correction</li>
+</ul>
+</details>        <p>Has capability to handle only one module. To do that, simply comment out path names for the missing module</p>
+
+
+<details class="flow-of-the-code" open>
+  <summary>Flow of the code</summary>
+  <ol>
+<li>define filenames and paths</li>
+<li>load events and filter by energy</li>
+<li>Load and clean GTIs</li>
+<li>Merge GTIs</li>
+<li>Filter events outside of common GTIs</li>
+<li>Get exposure correction factor</li>
+<li>Merge events from FPM A and B</li>
+<li>Get average count rates in GTIs</li>
+<li>Remove time gaps from events (in preperation for BB analysis)</li>
+<li>Perform Bayesian Block Routine</li>
+<li>Re-insert GTI gaps into data</li>
+<li>Print out txt file of BBA results</li>
+<li>Bin events into light curve</li>
+<li>Make light curve plot</li>
+</ol>
+</details>        <p>NOTE: parameters do not appear in the function signature, but instead are editable parameters of the code.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>year</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>year of the observation being analyzed (used for leap second correction)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>obsID</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>observation ID of observation being analyzed</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>output_dir</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to output directory</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>event_file_a</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to xselected event file for module A (optional)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>event_file_b</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to xselected event file for module B (optional)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>barycorr_event</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to barycenter corrected event file for module A or B (optional)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>lccorrfileA</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to light curve correction file for module A (optional)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>lccorrfileB</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to light curve correction file for module B (optional)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>energy_min</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>energy range in keV for bayesian block analysis. Default 3.0</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>energy_max</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>energy range in keV for bayesian block analysis. Default 30.0</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fp_rate</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>false positive rate used for bayesian block detection. Default 0.01</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>binsize</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>bin size in seconds for light curve plotting. Default 100</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>energy_range</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>energy range in keV for plotted light curve. Default: (3.0, 79.0)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <p>Returns:</p>
+<pre><code>12_bba_results.txt: text file with times, count rates, upper and lower limits
+14_lightcurve_plot.png: Light curve plot with 1 sigma upper and lower count rates per block
+ReadMe.txt: text file inputs and various script settings
+</code></pre>
+<p>Grace Sanger-Johnson 9/23/2025 based on runBB.pro IDL package created by Nicolas Barriere</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>main.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
+<span class="normal">474</span>
+<span class="normal">475</span>
+<span class="normal">476</span>
+<span class="normal">477</span>
+<span class="normal">478</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span>
+<span class="normal">499</span>
+<span class="normal">500</span>
+<span class="normal">501</span>
+<span class="normal">502</span>
+<span class="normal">503</span>
+<span class="normal">504</span>
+<span class="normal">505</span>
+<span class="normal">506</span>
+<span class="normal">507</span>
+<span class="normal">508</span>
+<span class="normal">509</span>
+<span class="normal">510</span>
+<span class="normal">511</span>
+<span class="normal">512</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
+<span class="normal">534</span>
+<span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span>
+<span class="normal">538</span>
+<span class="normal">539</span>
+<span class="normal">540</span>
+<span class="normal">541</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span>
+<span class="normal">551</span>
+<span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span>
+<span class="normal">566</span>
+<span class="normal">567</span>
+<span class="normal">568</span>
+<span class="normal">569</span>
+<span class="normal">570</span>
+<span class="normal">571</span>
+<span class="normal">572</span>
+<span class="normal">573</span>
+<span class="normal">574</span>
+<span class="normal">575</span>
+<span class="normal">576</span>
+<span class="normal">577</span>
+<span class="normal">578</span>
+<span class="normal">579</span>
+<span class="normal">580</span>
+<span class="normal">581</span>
+<span class="normal">582</span>
+<span class="normal">583</span>
+<span class="normal">584</span>
+<span class="normal">585</span>
+<span class="normal">586</span>
+<span class="normal">587</span>
+<span class="normal">588</span>
+<span class="normal">589</span>
+<span class="normal">590</span>
+<span class="normal">591</span>
+<span class="normal">592</span>
+<span class="normal">593</span>
+<span class="normal">594</span>
+<span class="normal">595</span>
+<span class="normal">596</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bayesian Block alorithm for use with NuSTAR data.</span>
+
+<span class="sd">    3 pairs of files are necessary as input:</span>
+<span class="sd">        - lightcurve correction factor file (produced by nuproducts)</span>
+<span class="sd">        - event list extracted from region of interest (produced by xselect)</span>
+<span class="sd">        - barycorr file to do barycenter correction</span>
+
+<span class="sd">    Has capability to handle only one module. To do that, simply comment out path names for the missing module</span>
+
+
+
+<span class="sd">    Flow of the code:</span>
+<span class="sd">        1. define filenames and paths</span>
+<span class="sd">        2. load events and filter by energy</span>
+<span class="sd">        3. Load and clean GTIs</span>
+<span class="sd">        4. Merge GTIs</span>
+<span class="sd">        5. Filter events outside of common GTIs</span>
+<span class="sd">        6. Get exposure correction factor</span>
+<span class="sd">        7. Merge events from FPM A and B</span>
+<span class="sd">        8. Get average count rates in GTIs</span>
+<span class="sd">        9. Remove time gaps from events (in preperation for BB analysis)</span>
+<span class="sd">        10. Perform Bayesian Block Routine</span>
+<span class="sd">        11. Re-insert GTI gaps into data</span>
+<span class="sd">        12. Print out txt file of BBA results</span>
+<span class="sd">        13. Bin events into light curve</span>
+<span class="sd">        14. Make light curve plot</span>
+
+<span class="sd">    NOTE: parameters do not appear in the function signature, but instead are editable parameters of the code.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        year (str): year of the observation being analyzed (used for leap second correction)</span>
+<span class="sd">        obsID (str): observation ID of observation being analyzed</span>
+<span class="sd">        output_dir (str): path to output directory</span>
+<span class="sd">        event_file_a (str): path to xselected event file for module A (optional)</span>
+<span class="sd">        event_file_b (str): path to xselected event file for module B (optional)</span>
+<span class="sd">        barycorr_event (str): path to barycenter corrected event file for module A or B (optional)</span>
+<span class="sd">        lccorrfileA (str): path to light curve correction file for module A (optional)</span>
+<span class="sd">        lccorrfileB (str): path to light curve correction file for module B (optional)</span>
+<span class="sd">        energy_min (int): energy range in keV for bayesian block analysis. Default 3.0</span>
+<span class="sd">        energy_max (int): energy range in keV for bayesian block analysis. Default 30.0</span>
+<span class="sd">        fp_rate (int): false positive rate used for bayesian block detection. Default 0.01</span>
+<span class="sd">        binsize (int): bin size in seconds for light curve plotting. Default 100</span>
+<span class="sd">        energy_range (list): energy range in keV for plotted light curve. Default: (3.0, 79.0)</span>
+
+
+
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">        12_bba_results.txt: text file with times, count rates, upper and lower limits</span>
+<span class="sd">        14_lightcurve_plot.png: Light curve plot with 1 sigma upper and lower count rates per block</span>
+<span class="sd">        ReadMe.txt: text file inputs and various script settings</span>
+
+
+
+
+
+<span class="sd">    Grace Sanger-Johnson 9/23/2025 based on runBB.pro IDL package created by Nicolas Barriere</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="s2">&quot;2016&quot;</span>
+    <span class="n">obsID</span> <span class="o">=</span> <span class="s2">&quot;40202001002&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;/Users/gracesanger-johnson/xray_astro/SgrA/&quot;</span>
+        <span class="o">+</span> <span class="n">year</span>
+        <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+        <span class="o">+</span> <span class="n">obsID</span>
+        <span class="o">+</span> <span class="s2">&quot;/event_cl2/BBA_results&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Define output directory</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/3-30_BB_output/&quot;</span>
+
+    <span class="c1"># make sure directory exists</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># output_dir = path+&quot;/testing/fp_testing/&quot;</span>
+
+    <span class="c1"># Set default file paths (DO NOT EDIT):</span>
+    <span class="n">event_file_a</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">event_file_b</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Define input file paths</span>
+    <span class="n">barycorr_event</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/nu&quot;</span> <span class="o">+</span> <span class="n">obsID</span> <span class="o">+</span> <span class="s2">&quot;A01_cl_barycorr.evt&quot;</span>
+    <span class="n">event_file_a</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/nu&quot;</span> <span class="o">+</span> <span class="n">obsID</span> <span class="o">+</span> <span class="s2">&quot;A01_xselected.evt&quot;</span>
+    <span class="n">event_file_b</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/nu&quot;</span> <span class="o">+</span> <span class="n">obsID</span> <span class="o">+</span> <span class="s2">&quot;B01_xselected.evt&quot;</span>
+    <span class="n">lccorrfileA</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/SgrA_correct_50ac_fpmA_lcsrccorrfile.fits&quot;</span>
+    <span class="n">lccorrfileB</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/SgrA_correct_50ac_fpmB_lcsrccorrfile.fits&quot;</span>
+
+    <span class="c1"># --- Define Parameters / General Used Ones ---</span>
+    <span class="n">energy_min</span> <span class="o">=</span> <span class="mf">3.0</span>
+    <span class="c1"># energy_max = 79.0</span>
+    <span class="n">energy_max</span> <span class="o">=</span> <span class="mf">30.0</span>
+
+    <span class="c1"># --- For Step 3 / GTI Cleaning ---</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------ Start Data Processing Pipeline ------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">######################## Step 1: Load Data #######################</span>
+    <span class="c1"># copy other fits files if one module is missing</span>
+    <span class="n">one_mod</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">event_file_a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">one_mod</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">present_mod</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span>
+        <span class="c1"># gti_file_a, event_file_a, lccorrfileA= one_module(gti_file_b, event_file_b, lccorrfileB,output_dir)</span>
+        <span class="c1"># duplicate_fits(gti_file_b, event_file_b, lccorrfileB, output_dir)</span>
+        <span class="n">duplicate_fits</span><span class="p">(</span><span class="n">event_file_b</span><span class="p">,</span> <span class="n">lccorrfileB</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+        <span class="c1"># gti_file_a = output_dir + &quot;gti_file_C&quot;</span>
+        <span class="n">event_file_a</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;event_file_C&quot;</span>
+        <span class="n">lccorrfileA</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;lccorrfile_C&quot;</span>
+
+    <span class="k">elif</span> <span class="n">event_file_b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">one_mod</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">present_mod</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+        <span class="c1"># gti_file_b, event_file_b, lccorrfileB = one_module(gti_file_a, event_file_a, lccorrfileA,output_dir)</span>
+        <span class="c1"># duplicate_fits(gti_file_a, event_file_a, lccorrfileA, output_dir)</span>
+        <span class="n">duplicate_fits</span><span class="p">(</span><span class="n">event_file_a</span><span class="p">,</span> <span class="n">lccorrfileA</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+        <span class="c1"># gti_file_b = output_dir + &quot;gti_file_C&quot;</span>
+        <span class="n">event_file_b</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;event_file_C&quot;</span>
+        <span class="n">lccorrfileB</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;lccorrfile_C&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 1: Loading GTI and event data...&quot;</span><span class="p">)</span>
+    <span class="n">gtiA</span> <span class="o">=</span> <span class="n">load_gti_file</span><span class="p">(</span><span class="n">event_file_a</span><span class="p">)</span>
+    <span class="n">gtiB</span> <span class="o">=</span> <span class="n">load_gti_file</span><span class="p">(</span><span class="n">event_file_b</span><span class="p">)</span>
+    <span class="n">eventsA</span> <span class="o">=</span> <span class="n">load_event_file</span><span class="p">(</span><span class="n">event_file_a</span><span class="p">)</span>
+    <span class="n">eventsB</span> <span class="o">=</span> <span class="n">load_event_file</span><span class="p">(</span><span class="n">event_file_b</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Module A: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gtiA</span><span class="p">)</span><span class="si">}</span><span class="s2"> GTI intervals, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">eventsA</span><span class="p">)</span><span class="si">}</span><span class="s2"> events.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Module B: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gtiB</span><span class="p">)</span><span class="si">}</span><span class="s2"> GTI intervals, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">eventsB</span><span class="p">)</span><span class="si">}</span><span class="s2"> events.&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 1.5: apply barycenter correction....&quot;</span><span class="p">)</span>
+    <span class="n">barycorr</span><span class="p">(</span><span class="n">barycorr_event</span><span class="p">,</span> <span class="n">event_file_a</span><span class="p">,</span> <span class="n">eventsA</span><span class="p">,</span> <span class="n">eventsB</span><span class="p">,</span> <span class="n">gtiA</span><span class="p">,</span> <span class="n">gtiB</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 1 Complete: Loaded GTI and event data for modules A and B.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Debugging: Print energy ranges</span>
+    <span class="c1"># print(f&quot;Energy range in Module A: min={eventsA[&#39;Energy&#39;].min()}, max={eventsA[&#39;Energy&#39;].max()}&quot;)</span>
+    <span class="c1"># print(f&quot;Energy range in Module B: min={eventsB[&#39;Energy&#39;].min()}, max={eventsB[&#39;Energy&#39;].max()}&quot;)</span>
+
+    <span class="c1"># print(&quot;\nInspecting the first 10 rows of Module A event data:&quot;)</span>
+    <span class="c1"># print(eventsA.head(10))</span>
+    <span class="c1"># print(&quot;\nInspecting the first 10 rows of Module B event data:&quot;)</span>
+    <span class="c1"># print(eventsB.head(10))</span>
+
+    <span class="c1">################## Step 2: Filter Events by Energy ##################</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 2: Filtering events by energy...&quot;</span><span class="p">)</span>
+    <span class="n">filtered_eventsA</span> <span class="o">=</span> <span class="n">filter_events_by_energy</span><span class="p">(</span><span class="n">eventsA</span><span class="p">,</span> <span class="n">energy_min</span><span class="p">,</span> <span class="n">energy_max</span><span class="p">)</span>
+    <span class="n">filtered_eventsB</span> <span class="o">=</span> <span class="n">filter_events_by_energy</span><span class="p">(</span><span class="n">eventsB</span><span class="p">,</span> <span class="n">energy_min</span><span class="p">,</span> <span class="n">energy_max</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Module A: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_eventsA</span><span class="p">)</span><span class="si">}</span><span class="s2"> events remaining.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Module B: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_eventsB</span><span class="p">)</span><span class="si">}</span><span class="s2"> events remaining.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Filtered events for energy range [</span><span class="si">{</span><span class="n">energy_min</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">energy_max</span><span class="si">}</span><span class="s2">] keV.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Save or pass the filtered data for the next steps</span>
+    <span class="n">filtered_eventsA</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;2_filtered_events_moduleA.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">filtered_eventsB</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;2_filtered_events_moduleB.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 2 Complete: Filtered event data saved for both modules.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">######################## Step 3: Clean GTIs ########################</span>
+    <span class="c1"># Parameters for GTI cleaning</span>
+    <span class="n">gti_threshold</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># Minimum duration (seconds)</span>
+    <span class="n">gti_starttrim</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># Trim seconds from start</span>
+    <span class="n">gti_stoptrim</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># Trim seconds from stop</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 3: Cleaning GTIs...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Module A: &quot;</span><span class="p">)</span>
+    <span class="n">gtiA_cleaned</span> <span class="o">=</span> <span class="n">clean_gti</span><span class="p">(</span>
+        <span class="n">gtiA</span><span class="p">,</span>
+        <span class="n">filtered_eventsA</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="o">=</span><span class="n">gti_threshold</span><span class="p">,</span>
+        <span class="n">starttrim</span><span class="o">=</span><span class="n">gti_starttrim</span><span class="p">,</span>
+        <span class="n">stoptrim</span><span class="o">=</span><span class="n">gti_stoptrim</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Module B: &quot;</span><span class="p">)</span>
+    <span class="n">gtiB_cleaned</span> <span class="o">=</span> <span class="n">clean_gti</span><span class="p">(</span>
+        <span class="n">gtiB</span><span class="p">,</span>
+        <span class="n">filtered_eventsB</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="o">=</span><span class="n">gti_threshold</span><span class="p">,</span>
+        <span class="n">starttrim</span><span class="o">=</span><span class="n">gti_starttrim</span><span class="p">,</span>
+        <span class="n">stoptrim</span><span class="o">=</span><span class="n">gti_stoptrim</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Save cleaned GTIs for debugging or further steps</span>
+    <span class="n">gtiA_cleaned</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;3_gtiA_cleaned.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">gtiB_cleaned</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;3_gtiB_cleaned.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 3 Complete: Cleaned GTIs saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">######################## Step 4: Merge GTIs ########################</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 4: Merging GTIs...&quot;</span><span class="p">)</span>
+    <span class="n">merged_gti</span> <span class="o">=</span> <span class="n">merge_gtis</span><span class="p">(</span><span class="n">gtiA_cleaned</span><span class="p">,</span> <span class="n">gtiB_cleaned</span><span class="p">)</span>
+
+    <span class="c1"># Save merged GTIs for debugging or further steps</span>
+    <span class="n">merged_gti</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;4_merged_gti.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 4 Complete: Merged GTIs saved to &#39;merged_gti.csv&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">########### Step 5: Filtering Events Using Common GTIs #############</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 5: Filtering events using common GTIs...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Module A: &quot;</span><span class="p">)</span>
+    <span class="n">filtered_eventsA_with_gti</span> <span class="o">=</span> <span class="n">filter_events_with_common_gti</span><span class="p">(</span>
+        <span class="n">filtered_eventsA</span><span class="p">,</span> <span class="n">merged_gti</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Module B: &quot;</span><span class="p">)</span>
+    <span class="n">filtered_eventsB_with_gti</span> <span class="o">=</span> <span class="n">filter_events_with_common_gti</span><span class="p">(</span>
+        <span class="n">filtered_eventsB</span><span class="p">,</span> <span class="n">merged_gti</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Save the filtered events for debugging or further analysis</span>
+    <span class="n">filtered_eventsA_with_gti</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;5_filtered_eventsA_with_gti.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">filtered_eventsB_with_gti</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;5_filtered_eventsB_with_gti.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 5 Complete: Filtered events saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">########### Step 6: Get Correction Factors for Rvents #############</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 6: Getting correction factors for photon events...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Apply the correction factor module for Module A</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Module A: &quot;</span><span class="p">)</span>
+    <span class="n">filtered_eventsA_with_gti</span><span class="p">[</span><span class="s2">&quot;CORRECTION_FACTOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_event_corr_factor</span><span class="p">(</span>
+        <span class="n">lccorrfileA</span><span class="p">,</span> <span class="n">filtered_eventsA_with_gti</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Apply the correction factor module for Module B</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Module B: &quot;</span><span class="p">)</span>
+    <span class="n">filtered_eventsB_with_gti</span><span class="p">[</span><span class="s2">&quot;CORRECTION_FACTOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_event_corr_factor</span><span class="p">(</span>
+        <span class="n">lccorrfileB</span><span class="p">,</span> <span class="n">filtered_eventsB_with_gti</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Save the updated DataFrames</span>
+    <span class="n">filtered_eventsA_with_gti</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;6_filtered_eventsA_with_corr.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">filtered_eventsB_with_gti</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;6_filtered_eventsB_with_corr.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 6 Complete: Correction factors saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">#################### Step 7: Merge Events ######################</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 7: Merging photon events...&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">one_mod</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;making the missing module dataframe empty...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">present_mod</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">:</span>
+            <span class="n">filtered_eventsB_with_gti</span> <span class="o">=</span> <span class="n">empty_df</span><span class="p">(</span><span class="n">filtered_eventsB_with_gti</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">present_mod</span> <span class="o">==</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span>
+            <span class="n">filtered_eventsA_with_gti</span> <span class="o">=</span> <span class="n">empty_df</span><span class="p">(</span><span class="n">filtered_eventsA_with_gti</span><span class="p">)</span>
+
+    <span class="c1"># Merge photon events with exposure factors and module labels</span>
+    <span class="n">events_merged</span> <span class="o">=</span> <span class="n">merge_events</span><span class="p">(</span>
+        <span class="n">filtered_eventsA_with_gti</span><span class="p">,</span>
+        <span class="n">filtered_eventsB_with_gti</span><span class="p">,</span>
+        <span class="n">filtered_eventsA_with_gti</span><span class="p">[</span><span class="s2">&quot;CORRECTION_FACTOR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">filtered_eventsB_with_gti</span><span class="p">[</span><span class="s2">&quot;CORRECTION_FACTOR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># delete NANs if present</span>
+    <span class="k">if</span> <span class="n">one_mod</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">events_merged</span> <span class="o">=</span> <span class="n">events_merged</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+    <span class="c1"># Save the merged DataFrame</span>
+    <span class="n">events_merged</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">7_events_merged.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 7 Complete: Merged events saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">################# Step 8: Calculate Average Count Rate ###################</span>
+
+    <span class="c1"># Configuration flag for count rate calculation</span>
+    <span class="n">calculate_average_count_rate</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Set to False to skip this step</span>
+
+    <span class="c1"># Optional flare GTI DataFrame (None if not provided)</span>
+    <span class="n">flare_gti</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Replace with the flare GTI DataFrame if available</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 8: Calculating the average count rate during GTIs...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Calculate average count rates</span>
+    <span class="n">average_rates</span> <span class="o">=</span> <span class="n">calculate_average_rate</span><span class="p">(</span>
+        <span class="n">events</span><span class="o">=</span><span class="n">events_merged</span><span class="p">,</span>
+        <span class="n">gti</span><span class="o">=</span><span class="n">merged_gti</span><span class="p">,</span>
+        <span class="n">flare_gti</span><span class="o">=</span><span class="n">flare_gti</span><span class="p">,</span>
+        <span class="n">calculate_average_count_rate</span><span class="o">=</span><span class="n">calculate_average_count_rate</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">average_rates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Save the results to a CSV</span>
+        <span class="n">average_rates</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">8_average_count_rates.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 8 Complete: Average count rates saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">################# Step 9: Remove Gaps between GTIs ###################</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 9: Removing gaps between GTIs...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Original observation end time</span>
+    <span class="n">original_tt_stop</span> <span class="o">=</span> <span class="n">merged_gti</span><span class="p">[</span><span class="s2">&quot;STOP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Original observation stop time:&quot;</span><span class="p">,</span> <span class="n">original_tt_stop</span><span class="p">)</span>
+
+    <span class="c1"># Suppress gaps in event times</span>
+    <span class="n">events_no_gaps</span><span class="p">,</span> <span class="n">updated_tt_stop</span><span class="p">,</span> <span class="n">cumulative_gaps</span> <span class="o">=</span> <span class="n">suppress_gti_gaps</span><span class="p">(</span>
+        <span class="n">event_df</span><span class="o">=</span><span class="n">events_merged</span><span class="p">,</span> <span class="n">gti_df</span><span class="o">=</span><span class="n">merged_gti</span><span class="p">,</span> <span class="n">original_tt_stop</span><span class="o">=</span><span class="n">original_tt_stop</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Save the updated event DataFrame</span>
+    <span class="n">events_no_gaps</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">9_events_no_gaps.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Optionally save cumulative gaps for debugging</span>
+    <span class="n">cumulative_gaps_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Cumulative Gap Time&quot;</span><span class="p">:</span> <span class="n">cumulative_gaps</span><span class="p">})</span>
+    <span class="n">cumulative_gaps_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">9_cumulative_gaps.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 9 Complete: Events with suppressed gaps saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">################# Step 10: Bayesian Block Analysis ###################</span>
+
+    <span class="c1"># Config Parameters</span>
+    <span class="n">plan_a</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Plan A (Hardcode -- does not really exist -- DO NOT USE)</span>
+    <span class="n">plan_b</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Plan B (Custom Astropy)</span>
+    <span class="n">fp_rate</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># False positive rate</span>
+    <span class="c1"># ncp_prior = None  # Prior number of change points</span>
+    <span class="n">ncp_prior</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+        <span class="n">fp_rate</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.0136</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">events_no_gaps</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.478</span><span class="p">))</span>
+    <span class="p">)</span>  <span class="c1"># As Shuo did</span>
+    <span class="n">do_iter</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Iterative refinement flag</span>
+    <span class="n">x_list</span> <span class="o">=</span> <span class="n">events_no_gaps</span><span class="p">[</span><span class="s2">&quot;Exposure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="c1"># x_list=np.random.uniform(low=0.4, high=0.68, size=len(events_no_gaps[&#39;TIME&#39;].values)) #for testing purposes</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 10: Bayesian Block Analysis...&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">plan_a</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Using Custom Bayesian Block Implementation...&quot;</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">find_blocks</span><span class="p">(</span>
+            <span class="n">events_no_gaps</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+            <span class="n">events_no_gaps</span><span class="p">[</span><span class="s2">&quot;Exposure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+            <span class="n">fp_rate</span><span class="p">,</span>
+            <span class="n">ncp_prior</span><span class="p">,</span>
+            <span class="n">do_iter</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">bayesian_blocks_df</span> <span class="o">=</span> <span class="n">format_bayesian_block_output</span><span class="p">(</span>
+            <span class="n">results</span><span class="p">,</span> <span class="n">fp_rate</span><span class="p">,</span> <span class="n">ncp_prior</span><span class="p">,</span> <span class="n">do_iter</span>
+        <span class="p">)</span>
+        <span class="c1"># Save results</span>
+        <span class="n">bayesian_blocks_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;10_bayesian_blocks.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Using Astropy Bayesian Block Implementation...&quot;</span><span class="p">)</span>
+        <span class="n">bayesian_blocks_df</span> <span class="o">=</span> <span class="n">bba_astropy</span><span class="p">(</span>
+            <span class="n">events_no_gaps</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ncp_prior</span><span class="p">,</span> <span class="n">fp_rate</span><span class="p">,</span> <span class="n">x_list</span><span class="o">=</span><span class="n">x_list</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Save results</span>
+        <span class="n">bayesian_blocks_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+            <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;10_bayesian_blocks_astropy.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 10 Complete: Bayesian Block Analysis results saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">############ Step 10.1: Detailed Analysis of the Flaring Activity Block ############</span>
+
+    <span class="c1"># Configuration for detailed flare analysis</span>
+    <span class="n">do_detailed_flare_analysis</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Do detailed analysis</span>
+    <span class="n">do_detailed_flare_analysis</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Not do detailed analysis</span>
+    <span class="n">flare_p0</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">flaring_start</span> <span class="o">=</span> <span class="mf">262239084.32836443</span>  <span class="c1"># Configured flaring start time</span>
+    <span class="n">flaring_stop</span> <span class="o">=</span> <span class="mf">262241049.05592683</span>  <span class="c1"># Configured flaring stop time</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 10.1: Detailed Analysis of Flaring Activity Block...&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">do_detailed_flare_analysis</span><span class="p">:</span>
+        <span class="c1"># Create the flaring block</span>
+        <span class="n">flaring_block</span> <span class="o">=</span> <span class="n">events_no_gaps</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">events_no_gaps</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">flaring_start</span><span class="p">)</span>
+            <span class="o">&amp;</span> <span class="p">(</span><span class="n">events_no_gaps</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">flaring_stop</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">flaring_block</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;    No events found in the flaring interval [</span><span class="si">{</span><span class="n">flaring_start</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">flaring_stop</span><span class="si">}</span><span class="s2">]. Skipping detailed analysis.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;    Flaring block extracted with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">flaring_block</span><span class="p">)</span><span class="si">}</span><span class="s2"> events in the interval [</span><span class="si">{</span><span class="n">flaring_start</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">flaring_stop</span><span class="si">}</span><span class="s2">].&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Perform detailed flare analysis</span>
+            <span class="n">detailed_blocks_df</span> <span class="o">=</span> <span class="n">detailed_flare_analysis</span><span class="p">(</span>
+                <span class="n">event_df</span><span class="o">=</span><span class="n">flaring_block</span><span class="p">,</span>  <span class="c1"># Pass only the flaring block</span>
+                <span class="n">bayesian_blocks_df</span><span class="o">=</span><span class="n">bayesian_blocks_df</span><span class="p">,</span>
+                <span class="n">p0</span><span class="o">=</span><span class="n">flare_p0</span><span class="p">,</span>
+                <span class="n">flare_analysis_flag</span><span class="o">=</span><span class="n">do_detailed_flare_analysis</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">detailed_blocks_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Save the refined flare analysis results</span>
+                <span class="n">detailed_blocks_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+                    <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;10.1_detailed_flare_blocks.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 10.1 Complete: Detailed flare blocks saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Skipping Step 10.1 as per configuration.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 10.5: Put change points back into real time&quot;</span><span class="p">)</span>
+
+    <span class="c1">################ Step 11: Restore GTI Gaps to Blocks ######################</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 11: Insert Data Gaps into Bayesian Blocks...&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Adjust BBA blocks by reintroducing GTI gaps</span>
+        <span class="n">corrected_bba_blocks</span><span class="p">,</span> <span class="n">gti_gaps_df</span> <span class="o">=</span> <span class="n">insert_gti_gaps</span><span class="p">(</span>
+            <span class="n">bba_df</span><span class="o">=</span><span class="n">bayesian_blocks_df</span><span class="p">,</span>
+            <span class="n">gti_df</span><span class="o">=</span><span class="n">merged_gti</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Save the output files</span>
+        <span class="n">corrected_bba_csv</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">11_corrected_bba_blocks.csv&quot;</span>
+        <span class="n">corrected_bba_blocks</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">corrected_bba_csv</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Corrected BBA Blocks saved.&quot;</span><span class="p">)</span>
+
+        <span class="n">gti_gaps_csv</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">11_gti_gaps.csv&quot;</span>
+        <span class="n">gti_gaps_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">gti_gaps_csv</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    GTI Gaps saved.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Validate corrected BBA blocks against final event time</span>
+        <span class="n">final_bba_stop</span> <span class="o">=</span> <span class="n">corrected_bba_blocks</span><span class="p">[</span><span class="s2">&quot;stop&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">final_event_time</span> <span class="o">=</span> <span class="n">events_merged</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>  <span class="c1"># From Step 7</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Final BBA Stop Time: </span><span class="si">{</span><span class="n">final_bba_stop</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Final Event Time: </span><span class="si">{</span><span class="n">final_event_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">final_bba_stop</span> <span class="o">-</span> <span class="n">final_event_time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Validation Failed: Corrected BBA blocks do not align with final event time.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Validation Passed: Corrected BBA blocks align with final event time.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in Step 11: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 11 Complete: Gaps reintroduced into Bayesian Blocks.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">####################### Step 12: Save BBA Results #########################</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 12: Save Bayesian Block Analysis Results...&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Calculate event counts, block lengths, and rates for each BBA block</span>
+        <span class="n">corrected_bba_blocks</span><span class="p">,</span> <span class="n">flare_blocks</span> <span class="o">=</span> <span class="n">calculate_event_counts_and_rates</span><span class="p">(</span>
+            <span class="n">corrected_bba_blocks</span><span class="p">,</span> <span class="n">events_merged</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Calculate confidence limits for each block</span>
+        <span class="n">corrected_bba_blocks</span> <span class="o">=</span> <span class="n">calculate_confidence_limits</span><span class="p">(</span><span class="n">corrected_bba_blocks</span><span class="p">)</span>
+
+        <span class="c1"># Observation metadata</span>
+        <span class="n">analysis_params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ncp_prior&quot;</span><span class="p">:</span> <span class="n">ncp_prior</span><span class="p">,</span>
+            <span class="s2">&quot;fp_rate&quot;</span><span class="p">:</span> <span class="n">fp_rate</span><span class="p">,</span>
+            <span class="s2">&quot;do_iter&quot;</span><span class="p">:</span> <span class="n">do_iter</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Define output file path</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">12_gti_results.txt&quot;</span>
+
+        <span class="c1"># Custom optional notes for each block</span>
+        <span class="c1"># save_results_note = [</span>
+        <span class="c1">#     &quot;Block 1 Note&quot;, &quot;Block 2 Note&quot;, &quot;Block 3 Note&quot;,</span>
+        <span class="c1">#     &quot;Block 4 Note&quot;, &quot;Block 5 Note&quot;, &quot;Block 6 Note&quot;,</span>
+        <span class="c1">#     &quot;Block 7 Note&quot;, &quot;Block 8 Note&quot;, &quot;Block 9 Note&quot;,</span>
+        <span class="c1">#     &quot;Block 10 Note&quot;, &quot;Block 11 Note&quot;</span>
+        <span class="c1"># ]</span>
+
+        <span class="c1"># Save BBA results as a text file</span>
+        <span class="n">save_bba_results_txt</span><span class="p">(</span>
+            <span class="n">bba_df</span><span class="o">=</span><span class="n">corrected_bba_blocks</span><span class="p">,</span>
+            <span class="n">analysis_params</span><span class="o">=</span><span class="n">analysis_params</span><span class="p">,</span>
+            <span class="n">output_file</span><span class="o">=</span><span class="n">output_file</span><span class="p">,</span>
+            <span class="c1"># save_results_note=save_results_note</span>
+        <span class="p">)</span>
+
+        <span class="c1"># save the flare version</span>
+        <span class="n">save_flare_results_txt</span><span class="p">(</span>
+            <span class="n">bba_df</span><span class="o">=</span><span class="n">flare_blocks</span><span class="p">,</span>
+            <span class="n">analysis_params</span><span class="o">=</span><span class="n">analysis_params</span><span class="p">,</span>
+            <span class="n">output_file</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">12_bba_results.txt&quot;</span><span class="p">,</span>
+            <span class="c1"># save_results_note=save_results_note</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 12 Complete: BBA results saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in Step 12: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1">################# Step 13: Create Binned Light Curve ####################</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 13: Generate Regularly Binned Light Curve...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># try:</span>
+    <span class="n">binsize</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Example bin size in seconds</span>
+    <span class="n">energy_range</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">79.0</span><span class="p">)</span>  <span class="c1"># Example energy range in keV</span>
+
+    <span class="c1"># Generate the light curve</span>
+    <span class="n">lightcurve_df</span> <span class="o">=</span> <span class="n">generate_lightcurve</span><span class="p">(</span>
+        <span class="n">events_df</span><span class="o">=</span><span class="n">events_merged</span><span class="p">,</span>  <span class="c1"># Use the events_merged DataFrame from Step 7</span>
+        <span class="n">gti_df</span><span class="o">=</span><span class="n">merged_gti</span><span class="p">,</span>  <span class="c1"># Use the GTI DataFrame from Step 4</span>
+        <span class="n">binsize</span><span class="o">=</span><span class="n">binsize</span><span class="p">,</span>
+        <span class="n">energy_range</span><span class="o">=</span><span class="n">energy_range</span><span class="p">,</span>
+        <span class="n">gti_average</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Set to True if GTI-based binning</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Save the light curve to a CSV file</span>
+    <span class="n">lightcurve_output_path</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;13_LC_</span><span class="si">{</span><span class="n">binsize</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+    <span class="n">lightcurve_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">lightcurve_output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 13 Complete: Light curve saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># except Exception as e:</span>
+    <span class="c1">#     print(f&quot;Error in Step 13: {e}&quot;)</span>
+
+    <span class="c1">####################### Step 14: Plot Light Curve with Bayesian Blocks #########################</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Step 14: Plot Light Curve with Bayesian Blocks...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Define file paths</span>
+    <span class="n">lc_plot_path</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;14_lightcurve_plot.png&quot;</span>
+    <span class="n">lc_csv_path</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;14_lightcurve.csv&quot;</span>
+    <span class="n">bb_csv_path</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;14_bayesian_blocks.csv&quot;</span>
+
+    <span class="c1"># prep for plotting by getting bb count rates in gti intervals</span>
+    <span class="n">plot_frame</span> <span class="o">=</span> <span class="n">plot_prep</span><span class="p">(</span><span class="n">corrected_bba_blocks</span><span class="p">,</span> <span class="n">flare_blocks</span><span class="p">)</span>
+    <span class="n">plotframe_csv_path</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;14_plot_frame.csv&quot;</span>
+    <span class="n">plot_frame</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">plotframe_csv_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Plot and save light curve</span>
+    <span class="n">plot_lightcurve</span><span class="p">(</span>
+        <span class="n">lightcurve_df</span><span class="o">=</span><span class="n">lightcurve_df</span><span class="p">,</span>  <span class="c1"># Regularly binned light curve</span>
+        <span class="c1"># bb_df=corrected_bba_blocks, #old call (basically gti defined)</span>
+        <span class="n">bb_df</span><span class="o">=</span><span class="n">plot_frame</span><span class="p">,</span>  <span class="c1"># Bayesian Blocks</span>
+        <span class="n">line_times</span><span class="o">=</span><span class="n">flare_blocks</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="n">lc_plot_path</span><span class="p">,</span>
+        <span class="n">lc_csv_path</span><span class="o">=</span><span class="n">lc_csv_path</span><span class="p">,</span>
+        <span class="n">bb_csv_path</span><span class="o">=</span><span class="n">bb_csv_path</span><span class="p">,</span>
+        <span class="n">convert_nustar_to_utc</span><span class="o">=</span><span class="n">convert_nustar_to_utc</span><span class="p">,</span>
+        <span class="n">plot_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 14 Complete: Light Curve and Bayesian Blocks saved.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------ Creating ReadMe with run information ------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">flags_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Barycenter correction&quot;</span><span class="p">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;BBA min energy&quot;</span><span class="p">:</span> <span class="n">energy_min</span><span class="p">,</span>
+        <span class="s2">&quot;BBA max energy&quot;</span><span class="p">:</span> <span class="n">energy_max</span><span class="p">,</span>
+        <span class="s2">&quot;plotting energy range&quot;</span><span class="p">:</span> <span class="n">energy_range</span><span class="p">,</span>
+        <span class="s2">&quot;input event file A&quot;</span><span class="p">:</span> <span class="n">event_file_a</span><span class="p">,</span>
+        <span class="s2">&quot;input event file B&quot;</span><span class="p">:</span> <span class="n">event_file_b</span><span class="p">,</span>
+        <span class="s2">&quot;input lccorr file A&quot;</span><span class="p">:</span> <span class="n">lccorrfileA</span><span class="p">,</span>
+        <span class="s2">&quot;input lccorr file B&quot;</span><span class="p">:</span> <span class="n">lccorrfileB</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">write_readme</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">flags_dict</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------ End of Data Processing Pipeline ------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
