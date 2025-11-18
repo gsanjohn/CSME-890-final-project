@@ -1,4 +1,4 @@
-# Welcome to MkDocs
+# Welcome
 
 This website was created as a part of CMSE-890 Reproducible Computational Workflows. The website serves as documentation for a Bayesian Block Analysis routine designed to be used with NuSTAR X-ray Telescope data. 
 
