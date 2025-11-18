@@ -1,0 +1,1 @@
+::: scripts.calculate_average_rate

@@ -1,0 +1,1 @@
+::: scripts.detailed_flare_analysis

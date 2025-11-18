@@ -1,17 +1,15 @@
 # Welcome to MkDocs
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+This website was created as a part of CMSE-890 Reproducible Computational Workflows. The website serves as documentation for a Bayesian Block Analysis routine designed to be used with NuSTAR X-ray Telescope data. 
 
-## Commands
+## Overview
+The pages of this website are organized using the Diataxis format. 
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+* [Explanation](explain.md) - Understanding the project.
+* [How-To Install](howto.md) - How to clone the repository.
+* [Tutorials](tutorial.md) - Example function usage.
+* [API reference](API_homepage.md) - Function documentation.
 
-## Project layout
+A complete DFD can be found below:
+![BBA_DFD](./BBA_DFD.png)
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
