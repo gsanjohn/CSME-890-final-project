@@ -1,6 +1,7 @@
 import pytest
 from astropy.io import fits
 import pandas as pd
+import numpy as np
 
 from scripts.data_loader import duplicate_fits, load_gti_file, load_event_file
 from scripts.barycenter_corr import barycorr
@@ -228,3 +229,10 @@ def test_barycorr(corr_file, event_file_a, eventsA, eventsB, gtiA, gtiB, time):
     assert (out_eventsB["TIME"] == eventsB_df["TIME"]).all()
     assert out_gtiA.equals(gtiA_df)
     assert out_gtiB.equals(gtiB_df)
+
+
+@pytest.mark.parametrize("data, energy_min, energy_max", [(eventsA_df, 0, 20)])
+def test_filter_events_by_energy(data, energy_min, energy_max):
+    output = filter_events_by_energy(data, energy_min, energy_max)
+    expected_energy = [2.96, 7.00, 7.24]
+    assert (output["Energy"].values == expected_energy).all()
