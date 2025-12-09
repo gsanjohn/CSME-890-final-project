@@ -92,7 +92,11 @@ def load_gti_file(file_path):
         with fits.open(file_path) as hdul:
             gti_data = hdul[2].data
             validate_gti_columns(gti_data.names)
-            return pd.DataFrame({"START": gti_data["START"], "STOP": gti_data["STOP"]})
+            gti_df = pd.DataFrame(
+                {"START": gti_data["START"], "STOP": gti_data["STOP"]}
+            )
+            return gti_df
+
     except Exception as e:
         raise RuntimeError(f"Failed to load GTI from file {file_path}: {e}")
 
