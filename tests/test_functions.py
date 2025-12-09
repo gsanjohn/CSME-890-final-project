@@ -1,5 +1,6 @@
 import pytest
 from astropy.io import fits
+import pandas as pd
 
 from scripts.data_loader import (
     duplicate_fits,
@@ -58,3 +59,61 @@ def test_duplicate_fits(event_file, lccorrfile, output_dir):
     assert diff1.identical, diff1.report()
     diff2 = fits_diff(lccorrfile, "./tests/test_output/lccorrfile_C")
     assert diff2.identical, diff2.report()
+
+
+@pytest.mark.parametrize("file_path", [("./tests/data/test_eventsA.fits")])
+def test_load_event_fileA(file_path):
+    output = load_event_file(file_path)
+
+    expected_df_A = pd.DataFrame(
+        {
+            "TIME": [
+                9.0,
+                32.0,
+                130.0,
+                166.0,
+                174.0,
+                182.0,
+                221.0,
+                265.0,
+                278.0,
+                296.0,
+                313.0,
+                326.0,
+                334.0,
+                369.0,
+                378.0,
+                422.0,
+                571.0,
+                586.0,
+                595.0,
+                596.0,
+            ],
+            "PI": [
+                1226.0,
+                1574.0,
+                1347.0,
+                768.0,
+                1026.0,
+                34.0,
+                1080.0,
+                829.0,
+                1479.0,
+                599.0,
+                584.0,
+                737.0,
+                135.0,
+                1380.0,
+                836.0,
+                1511.0,
+                141.0,
+                1316.0,
+                844.0,
+                1064.0,
+            ],
+        }
+    )
+    # Calculate Energy
+    expected_df_A["Energy"] = expected_df_A["PI"] * 0.04 + 1.6
+
+    pd.testing.assert_frame_equal(output, expected_df_A)
