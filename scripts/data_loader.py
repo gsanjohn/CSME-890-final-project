@@ -35,11 +35,9 @@ def duplicate_fits(event_file: str, lccorrfile: str, output_dir: str):
                 ):
                     # Table extensions → preserve column structure but no rows
                     cols = hdu.columns
-                    new_hdu = hdu.__class__.from_columns(cols, nrows=0)
-                    # Copy extra header keywords
-                    for key, val in hdu.header.items():
-                        if key not in new_hdu.header:
-                            new_hdu.header[key] = val
+                    new_hdu = hdu.__class__.from_columns(
+                        cols, header=hdu.header.copy(), nrows=0
+                    )
 
                 else:
                     # For any other HDU type, just copy header and strip data
@@ -51,6 +49,7 @@ def duplicate_fits(event_file: str, lccorrfile: str, output_dir: str):
             # Write new FITS file with same structure, empty data
             hdul_new = fits.HDUList(new_hdus)
             hdul_new.writeto(output_dir + output_file[i], overwrite=True)
+            print(output_dir + output_file[i])
 
     print(
         f"Copy of FITS with same structure (all extensions) saved to {output_dir, output_file}"
