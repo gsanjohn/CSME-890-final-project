@@ -2,12 +2,7 @@ import pytest
 from astropy.io import fits
 import pandas as pd
 
-from scripts.data_loader import (
-    duplicate_fits,
-    load_gti_file,
-    load_event_file,
-    empty_df,
-)
+from scripts.data_loader import duplicate_fits, load_gti_file, load_event_file
 from scripts.barycenter_corr import barycorr
 from scripts.event_filter import filter_events_by_energy
 from scripts.clean_gti import clean_gti
@@ -38,6 +33,143 @@ def fits_diff(file1, file2):
     return diff
 
 
+eventsA_df = pd.DataFrame(
+    {
+        "TIME": [
+            9.0,
+            32.0,
+            130.0,
+            166.0,
+            174.0,
+            182.0,
+            221.0,
+            265.0,
+            278.0,
+            296.0,
+            313.0,
+            326.0,
+            334.0,
+            369.0,
+            378.0,
+            422.0,
+            571.0,
+            586.0,
+            595.0,
+            596.0,
+        ],
+        "PI": [
+            1226.0,
+            1574.0,
+            1347.0,
+            768.0,
+            1026.0,
+            34.0,
+            1080.0,
+            829.0,
+            1479.0,
+            599.0,
+            584.0,
+            737.0,
+            135.0,
+            1380.0,
+            836.0,
+            1511.0,
+            141.0,
+            1316.0,
+            844.0,
+            1064.0,
+        ],
+    }
+)
+
+eventsA_df["Energy"] = eventsA_df["PI"] * 0.04 + 1.6
+
+gtiA_df = pd.DataFrame(
+    {"START": [0.0, 100.0, 450.0, 504.0], "STOP": [10.0, 200.0, 500.0, 506.0]}
+)
+
+eventsB_df = pd.DataFrame(
+    {
+        "TIME": [
+            5.0,
+            67.0,
+            81.0,
+            113.0,
+            115.0,
+            133.0,
+            142.0,
+            148.0,
+            167.0,
+            211.0,
+            216.0,
+            219.0,
+            249.0,
+            307.0,
+            312.0,
+            325.0,
+            386.0,
+            393.0,
+            454.0,
+            518.0,
+        ],
+        "PI": [
+            971.0,
+            1728.0,
+            173.0,
+            1875.0,
+            1228.0,
+            94.0,
+            52.0,
+            985.0,
+            1190.0,
+            105.0,
+            401.0,
+            287.0,
+            222.0,
+            730.0,
+            190.0,
+            871.0,
+            257.0,
+            34.0,
+            1690.0,
+            424.0,
+        ],
+    }
+)
+eventsB_df["Energy"] = eventsB_df["PI"] * 0.04 + 1.6
+gtiB_df = pd.DataFrame(
+    {"START": [0.0, 100.0, 450.0, 504.0], "STOP": [10.0, 200.0, 500.0, 506.0]}
+)
+lccorrA_df = pd.DataFrame(
+    {
+        "TSTART": [0.0, 100.0, 200.0, 300.0, 400.0, 500.0],
+        "TSTOP": [100.0, 200.0, 300.0, 400.0, 500.0, 600.0],
+        "FRACTION": [
+            0.715315770313184,
+            0.587911189664267,
+            0.549962835941608,
+            0.407291029188348,
+            0.456721739757098,
+            0.932465828637084,
+        ],
+    }
+)
+lccorrB_df = pd.DataFrame(
+    {
+        "TSTART": [0.0, 100.0, 200.0, 300.0, 400.0, 500.0],
+        "TSTOP": [100.0, 200.0, 300.0, 400.0, 500.0, 600.0],
+        "FRACTION": [
+            0.478264015916526,
+            0.103395804052955,
+            0.612026275541879,
+            0.588533709372726,
+            0.845335600199995,
+            0.610604541451639,
+        ],
+    }
+)
+
+
 @pytest.mark.parametrize(
     "event_file, lccorrfile, output_dir",
     [
@@ -64,66 +196,35 @@ def test_duplicate_fits(event_file, lccorrfile, output_dir):
 @pytest.mark.parametrize("file_path", [("./tests/data/test_eventsA.fits")])
 def test_load_event_file(file_path):
     output = load_event_file(file_path)
-
-    expected_df_A = pd.DataFrame(
-        {
-            "TIME": [
-                9.0,
-                32.0,
-                130.0,
-                166.0,
-                174.0,
-                182.0,
-                221.0,
-                265.0,
-                278.0,
-                296.0,
-                313.0,
-                326.0,
-                334.0,
-                369.0,
-                378.0,
-                422.0,
-                571.0,
-                586.0,
-                595.0,
-                596.0,
-            ],
-            "PI": [
-                1226.0,
-                1574.0,
-                1347.0,
-                768.0,
-                1026.0,
-                34.0,
-                1080.0,
-                829.0,
-                1479.0,
-                599.0,
-                584.0,
-                737.0,
-                135.0,
-                1380.0,
-                836.0,
-                1511.0,
-                141.0,
-                1316.0,
-                844.0,
-                1064.0,
-            ],
-        }
-    )
-    # Calculate Energy
-    expected_df_A["Energy"] = expected_df_A["PI"] * 0.04 + 1.6
-
-    pd.testing.assert_frame_equal(output, expected_df_A)
+    pd.testing.assert_frame_equal(output, eventsA_df)
 
 
 @pytest.mark.parametrize("file_path", [("./tests/data/test_eventsA.fits")])
 def test_load_gti_file(file_path):
     output = load_gti_file(file_path)
 
-    expected_df = pd.DataFrame(
-        {"START": [0.0, 100.0, 450.0, 504.0], "STOP": [10.0, 200.0, 500.0, 506.0]}
+    pd.testing.assert_frame_equal(output, gtiA_df, check_dtype=False)
+
+
+@pytest.mark.parametrize(
+    "corr_file, event_file_a, eventsA, eventsB, gtiA, gtiB, time",
+    [
+        (
+            "./tests/data/test_eventsBC.fits",
+            "./tests/data/test_eventsA.fits",
+            eventsA_df,
+            eventsB_df,
+            gtiA_df,
+            gtiB_df,
+            10,
+        )
+    ],
+)
+def test_barycorr(corr_file, event_file_a, eventsA, eventsB, gtiA, gtiB, time):
+    out_eventsA, out_eventsB, out_gtiA, out_gtiB = barycorr(
+        corr_file, event_file_a, eventsA, eventsB, gtiA, gtiB
     )
-    pd.testing.assert_frame_equal(output, expected_df, check_dtype=False)
+    assert (out_eventsA["TIME"] == eventsA_df["TIME"]).all()
+    assert (out_eventsB["TIME"] == eventsB_df["TIME"]).all()
+    assert out_gtiA.equals(gtiA_df)
+    assert out_gtiB.equals(gtiB_df)
