@@ -52,7 +52,9 @@ def duplicate_fits(event_file: str, lccorrfile: str, output_dir: str):
             hdul_new = fits.HDUList(new_hdus)
             hdul_new.writeto(output_dir + output_file[i], overwrite=True)
 
-    print(f"Copy of FITS with same structure (all extensions) saved to {output_file}")
+    print(
+        f"Copy of FITS with same structure (all extensions) saved to {output_dir, output_file}"
+    )
 
 
 def empty_df(array):
