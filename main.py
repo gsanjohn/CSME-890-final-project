@@ -74,8 +74,6 @@ def main():
         energy_range (list): energy range in keV for plotted light curve. Default: (3.0, 79.0)
 
 
-
-
     Returns:
 
         12_bba_results.txt: text file with times, count rates, upper and lower limits

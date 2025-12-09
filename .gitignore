@@ -1,1 +1,13 @@
 .DS_Store
+testing/to_trash/createEvents.py
+testing/to_trash/createLCcorr.py
+.gitignore
+testing/to_trash/event_file_A
+.gitignore
+testing/to_trash/event_file_B
+testing/to_trash/lccorrfile_A
+testing/to_trash/lccorrfile_B
+testing/to_trash/nu30702013002A01_cl_barycorr.evt
+.gitignore
+testing/to_trash/nu30702013002B01_cl_barycorr.evt
+testing/generate_dataset.py
