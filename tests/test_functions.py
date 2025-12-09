@@ -62,7 +62,7 @@ def test_duplicate_fits(event_file, lccorrfile, output_dir):
 
 
 @pytest.mark.parametrize("file_path", [("./tests/data/test_eventsA.fits")])
-def test_load_event_fileA(file_path):
+def test_load_event_file(file_path):
     output = load_event_file(file_path)
 
     expected_df_A = pd.DataFrame(
@@ -117,3 +117,13 @@ def test_load_event_fileA(file_path):
     expected_df_A["Energy"] = expected_df_A["PI"] * 0.04 + 1.6
 
     pd.testing.assert_frame_equal(output, expected_df_A)
+
+
+@pytest.mark.parametrize("file_path", [("./tests/data/test_eventsA.fits")])
+def test_load_gti_file(file_path):
+    output = load_gti_file(file_path)
+
+    expected_df = pd.DataFrame(
+        {"START": [0.0, 100.0, 450.0, 504.0], "STOP": [10.0, 200.0, 500.0, 506.0]}
+    )
+    pd.testing.assert_frame_equal(output, expected_df, check_dtype=False)
