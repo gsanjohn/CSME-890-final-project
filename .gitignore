@@ -11,3 +11,4 @@ testing/to_trash/nu30702013002A01_cl_barycorr.evt
 .gitignore
 testing/to_trash/nu30702013002B01_cl_barycorr.evt
 testing/generate_dataset.py
+testing/__pycache__/test_functions.cpython-311-pytest-8.4.2.pyc
