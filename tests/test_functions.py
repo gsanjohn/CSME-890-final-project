@@ -247,3 +247,10 @@ def test_clean_gti(gti, events, threshold, starttrim, stoptrim):
         {"START": 111.0, "STOP": 209.0, "DURATION": 98.0, "EVENT_COUNT": 4}, index=[1]
     )
     assert output.equals(expected_output)
+
+
+@pytest.mark.parametrize("gtiA,gtiB", [(gtiA_df, gtiB_df)])
+def test_merge_gtis(gtiA, gtiB):
+    output = merge_gtis(gtiA, gtiB)
+    expected = gtiA_df
+    output.equals(expected)
