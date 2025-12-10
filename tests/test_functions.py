@@ -236,3 +236,14 @@ def test_filter_events_by_energy(data, energy_min, energy_max):
     output = filter_events_by_energy(data, energy_min, energy_max)
     expected_energy = [2.96, 7.00, 7.24]
     assert (output["Energy"].values == expected_energy).all()
+
+
+@pytest.mark.parametrize(
+    "gti, events, threshold, starttrim, stoptrim", [(gtiA_df, eventsA_df, 60, 1, 1)]
+)
+def test_clean_gti(gti, events, threshold, starttrim, stoptrim):
+    output = clean_gti(gti, events, threshold, starttrim, stoptrim)
+    expected_output = pd.DataFrame(
+        {"START": 111.0, "STOP": 209.0, "DURATION": 98.0, "EVENT_COUNT": 4}, index=[1]
+    )
+    assert output.equals(expected_output)
