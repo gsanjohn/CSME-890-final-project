@@ -1,6 +1,7 @@
 import pytest
 from astropy.io import fits
 import pandas as pd
+import numpy as np
 
 
 from scripts.data_loader import duplicate_fits, load_gti_file, load_event_file
@@ -275,3 +276,39 @@ def test_filter_events_with_common_gti(data):
     output = filter_events_with_common_gti(events, gti)
     expected = pd.DataFrame({"TIME": [9.0, 130.0, 166.0, 174.0, 182.0]})
     assert (output["TIME"] == expected["TIME"]).all()
+
+
+@pytest.mark.parametrize(
+    "lccorr,data",
+    [("./tests/data/test_LCcorrA.fits", "./tests/data/test_eventsA.fits")],
+)
+def test_get_event_corr_factor(lccorr, data):
+    events = load_event_file(data)
+    output = get_event_corr_factor(lccorr, events["TIME"])
+    expected = np.array(
+        [
+            0.71531577,
+            0.71531577,
+            0.58791119,
+            0.58791119,
+            0.58791119,
+            0.58791119,
+            0.54996284,
+            0.54996284,
+            0.54996284,
+            0.54996284,
+            0.40729103,
+            0.40729103,
+            0.40729103,
+            0.40729103,
+            0.40729103,
+            0.45672174,
+            0.93246583,
+            0.93246583,
+            0.93246583,
+            0.93246583,
+        ]
+    )
+    print(all([a == b for a, b in zip(output, expected)]))
+    assert len(output) == len(expected)
+    assert all([a == b for a, b in zip(output, expected)])
