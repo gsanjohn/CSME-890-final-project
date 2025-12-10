@@ -1,7 +1,7 @@
 import pytest
 from astropy.io import fits
 import pandas as pd
-import numpy as np
+
 
 from scripts.data_loader import duplicate_fits, load_gti_file, load_event_file
 from scripts.barycenter_corr import barycorr
@@ -208,27 +208,30 @@ def test_load_gti_file(file_path):
 
 
 @pytest.mark.parametrize(
-    "corr_file, event_file_a, eventsA, eventsB, gtiA, gtiB, time",
+    "corr_file, event_file_a, event_file_b, time",
     [
         (
             "./tests/data/test_eventsBC.fits",
             "./tests/data/test_eventsA.fits",
-            eventsA_df,
-            eventsB_df,
-            gtiA_df,
-            gtiB_df,
+            "./tests/data/test_eventsA.fits",
             10,
         )
     ],
 )
-def test_barycorr(corr_file, event_file_a, eventsA, eventsB, gtiA, gtiB, time):
+def test_barycorr(corr_file, event_file_a, event_file_b, time):
+    gtiA = load_gti_file(event_file_a)
+    gtiB = load_gti_file(event_file_b)
+    eventsA = load_event_file(event_file_a)
+    eventsB = load_event_file(event_file_b)
+
     out_eventsA, out_eventsB, out_gtiA, out_gtiB = barycorr(
         corr_file, event_file_a, eventsA, eventsB, gtiA, gtiB
     )
-    assert (out_eventsA["TIME"] == eventsA_df["TIME"]).all()
-    assert (out_eventsB["TIME"] == eventsB_df["TIME"]).all()
-    assert out_gtiA.equals(gtiA_df)
-    assert out_gtiB.equals(gtiB_df)
+
+    assert (out_eventsA["TIME"] == eventsA["TIME"]).all()
+    assert (out_eventsB["TIME"] == eventsB["TIME"]).all()
+    assert out_gtiA.equals(gtiA_df + 10)
+    assert out_gtiB.equals(gtiB_df + 10)
 
 
 @pytest.mark.parametrize("data, energy_min, energy_max", [(eventsA_df, 0, 20)])
@@ -239,18 +242,27 @@ def test_filter_events_by_energy(data, energy_min, energy_max):
 
 
 @pytest.mark.parametrize(
-    "gti, events, threshold, starttrim, stoptrim", [(gtiA_df, eventsA_df, 60, 1, 1)]
+    "eventsfile, threshold, starttrim, stoptrim",
+    [("./tests/data/test_eventsA.fits", 60, 1, 1)],
 )
-def test_clean_gti(gti, events, threshold, starttrim, stoptrim):
+def test_clean_gti(eventsfile, threshold, starttrim, stoptrim):
+    gti = load_gti_file(eventsfile)
+    events = load_event_file(eventsfile)
     output = clean_gti(gti, events, threshold, starttrim, stoptrim)
     expected_output = pd.DataFrame(
-        {"START": 111.0, "STOP": 209.0, "DURATION": 98.0, "EVENT_COUNT": 4}, index=[1]
+        {"START": 101.0, "STOP": 199.0, "DURATION": 98.0, "EVENT_COUNT": 4}, index=[1]
     )
     assert output.equals(expected_output)
 
 
-@pytest.mark.parametrize("gtiA,gtiB", [(gtiA_df, gtiB_df)])
-def test_merge_gtis(gtiA, gtiB):
+@pytest.mark.parametrize(
+    "eventsfileA,eventsfileB",
+    [("./tests/data/test_eventsA.fits", "./tests/data/test_eventsB.fits")],
+)
+def test_merge_gtis(eventsfileA, eventsfileB):
+    gtiA = load_gti_file(eventsfileA)
+    gtiB = load_gti_file(eventsfileB)
     output = merge_gtis(gtiA, gtiB)
-    expected = gtiA_df
-    output.equals(expected)
+
+    assert (output["START"] == gtiA["START"]).all()
+    assert (output["STOP"] == gtiA["STOP"]).all()
