@@ -266,3 +266,12 @@ def test_merge_gtis(eventsfileA, eventsfileB):
 
     assert (output["START"] == gtiA["START"]).all()
     assert (output["STOP"] == gtiA["STOP"]).all()
+
+
+@pytest.mark.parametrize("data", [("./tests/data/test_eventsA.fits")])
+def test_filter_events_with_common_gti(data):
+    events = load_event_file(data)
+    gti = load_gti_file(data)
+    output = filter_events_with_common_gti(events, gti)
+    expected = pd.DataFrame({"TIME": [9.0, 130.0, 166.0, 174.0, 182.0]})
+    assert (output["TIME"] == expected["TIME"]).all()
