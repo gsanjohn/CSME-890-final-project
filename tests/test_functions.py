@@ -423,3 +423,40 @@ def test_calculate_average_rate(lccorr, data):
         format_events, gti, flare_gti=None, calculate_average_count_rate=False
     )
     assert output is None
+
+
+@pytest.mark.parametrize(
+    "data,original_tt_stop",
+    [("./tests/data/test_eventsA.fits", 600)],
+)
+def test_suppress_gti_gaps(data, original_tt_stop):
+    events = load_event_file(data)[0:5]
+    gti = load_gti_file(data)
+    updated_event_df, updated_tt_stop, cumulative_gap_times = suppress_gti_gaps(
+        events, gti, original_tt_stop
+    )
+    expected_df = pd.DataFrame(
+        {
+            "TIME": [
+                9.0,
+                32.0,
+                40.0,
+                76.0,
+                84.0,
+            ],
+            "PI": [
+                1226.0,
+                1574.0,
+                1347.0,
+                768.0,
+                1026.0,
+            ],
+            "ENERGY": [50.64, 64.56, 55.48, 32.32, 42.64],
+        }
+    )
+    expected_tt_stop = 84.0
+    expected_gap_times = np.array([0.0, 90.0, 340.0, 344.0])
+
+    assert updated_event_df.equals(expected_df)
+    assert updated_tt_stop == expected_tt_stop
+    assert cumulative_gap_times == expected_gap_times
