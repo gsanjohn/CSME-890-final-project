@@ -312,3 +312,100 @@ def test_get_event_corr_factor(lccorr, data):
     print(all([a == b for a, b in zip(output, expected)]))
     assert len(output) == len(expected)
     assert all([a == b for a, b in zip(output, expected)])
+
+
+@pytest.mark.parametrize(
+    "eventA, eventB,lcA,lcB",
+    [
+        (
+            "./tests/data/test_eventsA.fits",
+            "./tests/data/test_eventsB.fits",
+            "./tests/data/test_LCcorrA.fits",
+            "./tests/data/test_LCcorrB.fits",
+        )
+    ],
+)
+def test_merge_events(eventA, eventB, lcA, lcB):
+    eventsA = load_event_file(eventA)
+    eventsB = load_event_file(eventB)
+    exposureA = get_event_corr_factor(lcA, eventsA["TIME"])
+    exposureB = get_event_corr_factor(lcB, eventsB["TIME"])
+
+    print(eventsA)
+    print(eventsB)
+    print(exposureA)
+    print(eventsA)
+
+    output = merge_events(eventsA, eventsB, exposureA, exposureB)
+    expected = pd.DataFrame(
+        {
+            "TIME": [
+                9.0,
+                32.0,
+                130.0,
+                166.0,
+                174.0,
+                182.0,
+                221.0,
+                265.0,
+                278.0,
+                296.0,
+                313,
+                326.0,
+                334.0,
+                369.0,
+                378.0,
+                422.0,
+                571.0,
+                586.0,
+                595.0,
+                596.0,
+            ],
+            "PI": [
+                1226.0,
+                1574.0,
+                1347.0,
+                786.0,
+                1026.0,
+                34.0,
+                1080.0,
+                829.0,
+                1476.0,
+                599.0,
+                584.0,
+                737.0,
+                135.0,
+                1380.0,
+                836.0,
+                1511.0,
+                141.0,
+                1316.0,
+                844.0,
+                1064.0,
+            ],
+            "ENERGY": [
+                50.64,
+                64.56,
+                55.48,
+                32.32,
+                42.64,
+                2.96,
+                44.80,
+                34.76,
+                60.76,
+                25.56,
+                24.96,
+                31.08,
+                7.00,
+                56.8,
+                35.04,
+                62.04,
+                7.24,
+                54.24,
+                35.36,
+                44.16,
+            ],
+        }
+    )
+    # print(expected)
+    assert output.equals(expected)
