@@ -409,3 +409,17 @@ def test_merge_events(eventA, eventB, lcA, lcB):
     )
     # print(expected)
     assert output.equals(expected)
+
+
+@pytest.mark.parametrize(
+    "lccorr,data",
+    [("./tests/data/test_LCcorrA.fits", "./tests/data/test_eventsA.fits")],
+)
+def test_calculate_average_rate(lccorr, data):
+    get_events = load_event_file(data)
+    format_events = get_event_corr_factor(lccorr, get_events["TIME"])
+    gti = load_gti_file(data)
+    output = calculate_average_rate(
+        format_events, gti, flare_gti=None, calculate_average_count_rate=False
+    )
+    assert output is None
