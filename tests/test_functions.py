@@ -1,7 +1,7 @@
 import pytest
 from astropy.io import fits
 import pandas as pd
-from pandas.testing import assert_frame_equal
+from pandas.testing import assert_frame_equal, assert_series_equal
 import numpy as np
 from datetime import datetime
 
@@ -489,3 +489,67 @@ def test_convert_nustar_to_utc(nustar_time, utc_time):
     output = convert_nustar_to_utc(nustar_time)
 
     assert output == utc_time
+
+
+@pytest.mark.parametrize(
+    "data,lccorr,expected_counts,expected_rates",
+    [("./tests/data/test_eventsA.fits", "./tests/data/test_LCcorrA.fits", 500, 5)],
+)
+def test_calculate_event_counts_and_rates(
+    data, lccorr, expected_counts, expected_rates
+):
+    events = load_event_file(data)
+    full_events = get_event_corr_factor(lccorr, events["TIME"])
+    bba_frame = pd.DataFrame(
+        {
+            "start": [0],
+            "stop": [100],
+            "duration": [100],
+            "counts": [500],
+            "rate": [500],
+            "block_label": [0],
+        }
+    )
+    output = calculate_event_counts_and_rates(
+        bba_frame, full_events, exposure_col="Exposure"
+    )
+
+    assert output == expected_counts
+    assert output == expected_rates
+    # assert (output["COUNTS"] == expected_counts).all()
+    # assert (output["COUNTS"] == expected_rates).all()
+
+
+@pytest.mark.parametrize(
+    "data, expected_data",
+    [
+        (
+            pd.DataFrame({"Counts": [10, 20, 30], "Length (s)": [100, 200, 300]}),
+            pd.DataFrame(
+                {
+                    "1sig upper lim": [0.132787, 0.122776, 0.118484],
+                    "1sig lower lim": [0.068775, 0.077780, 0.081819],
+                }
+            ),
+        ),
+        (
+            pd.DataFrame({"Counts": [40, 50, 60], "Length (s)": [400, 500, 600]}),
+            pd.DataFrame(
+                {
+                    "1sig upper lim": [0.115959, 0.114248, 0.112990],
+                    "1sig lower lim": [0.084238, 0.085893, 0.087117],
+                }
+            ),
+        ),
+    ],
+)
+def test_calculate_confidence_limits(data, expected_data):
+    output = calculate_confidence_limits(data)
+
+    assert_series_equal(
+        output["1sig upper lim"], expected_data["1sig upper lim"], check_dtype=False
+    )
+
+    assert_series_equal(
+        output["1sig lower lim"], expected_data["1sig lower lim"], check_dtype=False
+    )
