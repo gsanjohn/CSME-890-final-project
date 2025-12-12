@@ -520,8 +520,6 @@ def test_calculate_event_counts_and_rates(
 
     assert output == expected_counts
     assert output == expected_rates
-    # assert (output["COUNTS"] == expected_counts).all()
-    # assert (output["COUNTS"] == expected_rates).all()
 
 
 @pytest.mark.parametrize(
