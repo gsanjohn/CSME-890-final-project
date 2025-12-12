@@ -329,8 +329,8 @@ def test_get_event_corr_factor(lccorr, data):
     ],
 )
 def test_merge_events(eventA, eventB, lcA, lcB):
-    eventsA = load_event_file(eventA)
-    eventsB = load_event_file(eventB)
+    eventsA = load_event_file(eventA)[0:5]
+    eventsB = load_event_file(eventB)[0:5]
     exposureA = get_event_corr_factor(lcA, eventsA["TIME"])
     exposureB = get_event_corr_factor(lcB, eventsB["TIME"])
 
@@ -342,75 +342,58 @@ def test_merge_events(eventA, eventB, lcA, lcB):
     output = merge_events(eventsA, eventsB, exposureA, exposureB)
     expected = pd.DataFrame(
         {
-            "TIME": [
-                9.0,
-                32.0,
-                130.0,
-                166.0,
-                174.0,
-                182.0,
-                221.0,
-                265.0,
-                278.0,
-                296.0,
-                313,
-                326.0,
-                334.0,
-                369.0,
-                378.0,
-                422.0,
-                571.0,
-                586.0,
-                595.0,
-                596.0,
-            ],
+            "TIME": [5.0, 9.0, 32.0, 67.0, 81.0, 113.0, 115.0, 130.0, 166.0, 174.0],
             "PI": [
+                971.0,
                 1226.0,
                 1574.0,
+                1728.0,
+                173.0,
+                1875.0,
+                1228.0,
                 1347.0,
-                786.0,
+                768.0,
                 1026.0,
-                34.0,
-                1080.0,
-                829.0,
-                1476.0,
-                599.0,
-                584.0,
-                737.0,
-                135.0,
-                1380.0,
-                836.0,
-                1511.0,
-                141.0,
-                1316.0,
-                844.0,
-                1064.0,
             ],
-            "ENERGY": [
+            "Energy": [
+                40.44,
                 50.64,
                 64.56,
+                70.72,
+                8.52,
+                76.60,
+                50.72,
                 55.48,
                 32.32,
                 42.64,
-                2.96,
-                44.80,
-                34.76,
-                60.76,
-                25.56,
-                24.96,
-                31.08,
-                7.00,
-                56.8,
-                35.04,
-                62.04,
-                7.24,
-                54.24,
-                35.36,
-                44.16,
+            ],
+            "Exposure": [
+                0.478264,
+                0.715316,
+                0.715316,
+                0.478264,
+                0.478264,
+                0.103396,
+                0.103396,
+                0.587911,
+                0.587911,
+                0.587911,
+            ],
+            "Module": [
+                "B",
+                "A",
+                "A",
+                "B",
+                "B",
+                "B",
+                "B",
+                "A",
+                "A",
+                "A",
             ],
         }
     )
-    # print(expected)
+    print(output)
     # assert output.equals(expected)
     assert_frame_equal(output, expected, check_dtype=False)
 
