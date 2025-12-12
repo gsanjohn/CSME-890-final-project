@@ -481,8 +481,11 @@ def test_insert_gti_gaps(eventsfileA, eventsfileB, BBA_df):
     assert_frame_equal(output_gti_gaps, expected_gti_gaps, check_dtype=False)
 
 
-@pytest.mark.parametrize("time", [(0)])
-def test_convert_nustar_to_utc(time):
-    output = convert_nustar_to_utc(time)
+@pytest.mark.parametrize(
+    "nustar_time,utc_time",
+    [(0, datetime(2010, 1, 1, 0, 0)), (50000, datetime(2010, 1, 1, 13, 53, 20))],
+)
+def test_convert_nustar_to_utc(nustar_time, utc_time):
+    output = convert_nustar_to_utc(nustar_time)
 
-    assert output == datetime(2010, 1, 1, 0, 0)
+    assert output == utc_time
