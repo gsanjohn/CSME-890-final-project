@@ -3,6 +3,7 @@ from astropy.io import fits
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import numpy as np
+from datetime import datetime
 
 
 from scripts.data_loader import duplicate_fits, load_gti_file, load_event_file
@@ -478,3 +479,10 @@ def test_insert_gti_gaps(eventsfileA, eventsfileB, BBA_df):
         output_corrected_blocks, expected_corrected_blocks, check_dtype=False
     )
     assert_frame_equal(output_gti_gaps, expected_gti_gaps, check_dtype=False)
+
+
+@pytest.mark.parametrize("time", [(0)])
+def test_convert_nustar_to_utc(time):
+    output = convert_nustar_to_utc(time)
+
+    assert output == datetime(2010, 1, 1, 0, 0)
