@@ -447,3 +447,34 @@ def test_suppress_gti_gaps(data, original_tt_stop):
     assert_frame_equal(updated_event_df, expected_df, check_dtype=False)
     assert updated_tt_stop == expected_tt_stop
     assert (cumulative_gap_times == expected_gap_times).all
+
+
+@pytest.mark.parametrize(
+    "eventsfileA, eventsfileB, BBA_df",
+    [
+        (
+            "./tests/data/test_eventsA.fits",
+            "./tests/data/test_eventsB.fits",
+            pd.DataFrame({"start": [0], "stop": [40]}),
+        )
+    ],
+)
+def test_insert_gti_gaps(eventsfileA, eventsfileB, BBA_df):
+    gtiA = load_gti_file(eventsfileA)
+    gtiB = load_gti_file(eventsfileB)
+    merged_gtis = merge_gtis(gtiA, gtiB)
+    output_corrected_blocks, output_gti_gaps = insert_gti_gaps(BBA_df, merged_gtis)
+
+    expected_corrected_blocks = pd.DataFrame({"start": [0, 100], "stop": [10, 130]})
+    expected_gti_gaps = pd.DataFrame(
+        {
+            "GAP_START": [10, 200, 500],
+            "GAP_STOP": [100, 450, 504],
+            "GAP_DURATION": [90, 250, 4],
+        }
+    )
+
+    assert_frame_equal(
+        output_corrected_blocks, expected_corrected_blocks, check_dtype=False
+    )
+    assert_frame_equal(output_gti_gaps, expected_gti_gaps, check_dtype=False)
