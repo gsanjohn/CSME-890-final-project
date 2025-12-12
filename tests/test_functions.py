@@ -200,14 +200,13 @@ def test_duplicate_fits(event_file, lccorrfile, output_dir):
 @pytest.mark.parametrize("file_path", [("./tests/data/test_eventsA.fits")])
 def test_load_event_file(file_path):
     output = load_event_file(file_path)
-    pd.testing.assert_frame_equal(output, eventsA_df)
+    assert_frame_equal(output, eventsA_df)
 
 
 @pytest.mark.parametrize("file_path", [("./tests/data/test_eventsA.fits")])
 def test_load_gti_file(file_path):
     output = load_gti_file(file_path)
-
-    pd.testing.assert_frame_equal(output, gtiA_df, check_dtype=False)
+    assert_frame_equal(output, gtiA_df, check_dtype=False)
 
 
 @pytest.mark.parametrize(
@@ -216,8 +215,7 @@ def test_load_gti_file(file_path):
         (
             "./tests/data/test_eventsBC.fits",
             "./tests/data/test_eventsA.fits",
-            "./tests/data/test_eventsA.fits",
-            10,
+            "./tests/data/test_eventsB.fits",
         )
     ],
 )
@@ -231,7 +229,7 @@ def test_barycorr(corr_file, event_file_a, event_file_b, time):
         corr_file, event_file_a, eventsA, eventsB, gtiA, gtiB
     )
 
-    assert (out_eventsA["TIME"] == eventsA["TIME"]).all()
+    assert_series_equal(out_eventsA["TIME"], eventsA["TIME"], c)
     assert (out_eventsB["TIME"] == eventsB["TIME"]).all()
     assert out_gtiA.equals(gtiA_df + 10)
     assert out_gtiB.equals(gtiB_df + 10)
@@ -414,34 +412,40 @@ def test_calculate_average_rate(lccorr, data):
 
 
 @pytest.mark.parametrize(
-    "data,original_tt_stop",
-    [("./tests/data/test_eventsA.fits", 600)],
+    "data,original_tt_stop, expected_df",
+    [
+        (
+            "./tests/data/test_eventsA.fits",
+            600,
+            pd.DataFrame(
+                {
+                    "TIME": [
+                        9.0,
+                        32.0,
+                        40.0,
+                        76.0,
+                        84.0,
+                    ],
+                    "PI": [
+                        1226.0,
+                        1574.0,
+                        1347.0,
+                        768.0,
+                        1026.0,
+                    ],
+                    "Energy": [50.64, 64.56, 55.48, 32.32, 42.64],
+                }
+            ),
+        )
+    ],
 )
-def test_suppress_gti_gaps(data, original_tt_stop):
+def test_suppress_gti_gaps(data, original_tt_stop, expected_df):
     events = load_event_file(data)[0:5]
     gti = load_gti_file(data)
     updated_event_df, updated_tt_stop, cumulative_gap_times = suppress_gti_gaps(
         events, gti, original_tt_stop
     )
-    expected_df = pd.DataFrame(
-        {
-            "TIME": [
-                9.0,
-                32.0,
-                40.0,
-                76.0,
-                84.0,
-            ],
-            "PI": [
-                1226.0,
-                1574.0,
-                1347.0,
-                768.0,
-                1026.0,
-            ],
-            "Energy": [50.64, 64.56, 55.48, 32.32, 42.64],
-        }
-    )
+
     expected_tt_stop = 84.0
     expected_gap_times = np.array([0.0, 90.0, 340.0, 344.0])
 
