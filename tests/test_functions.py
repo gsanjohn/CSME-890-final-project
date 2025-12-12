@@ -553,3 +553,67 @@ def test_calculate_confidence_limits(data, expected_data):
     assert_series_equal(
         output["1sig lower lim"], expected_data["1sig lower lim"], check_dtype=False
     )
+
+
+@pytest.mark.parametrize(
+    "data,lc_data,binsize,energy_range,gti_average, expected",
+    [
+        (
+            "./tests/data/test_eventsA.fits",
+            "./tests/data/test_LCcorrA.fits",
+            100,
+            (3, 79),
+            True,
+            pd.DataFrame(
+                {
+                    "bin_start": [0.0, 450.0],
+                    "bin_end": [
+                        100.0,
+                        504.0,
+                    ],
+                    "count_rate": [0.02796, np.NaN],
+                    "upper_limit": [0.051143, np.NaN],
+                    "lower_limit": [0.009466, np.NaN],
+                },
+                index=[0, 2],
+            ),
+        ),
+        (
+            "./tests/data/test_eventsA.fits",
+            "./tests/data/test_LCcorrA.fits",
+            100,
+            (0, 100),
+            True,
+            pd.DataFrame(
+                {
+                    "bin_start": [0.0, 450.0],
+                    "bin_end": [100.0, 504.0],
+                    "count_rate": [0.02796, np.NaN],
+                    "upper_limit": [0.051143, np.NaN],
+                    "lower_limit": [0.009466, np.NaN],
+                },
+                index=[0, 2],
+            ),
+        ),
+    ],
+)
+def test_generate_lightcurve(
+    data, lc_data, binsize, energy_range, gti_average, expected
+):
+    events = load_event_file(data)
+    gti = load_gti_file(data)
+    events["CORRECTION_FACTOR"] = get_event_corr_factor(lc_data, events["TIME"])
+    output = generate_lightcurve(
+        events_df=events,  # Use the events_merged DataFrame from Step 7
+        gti_df=gti,  # Use the GTI DataFrame from Step 4
+        binsize=binsize,
+        energy_range=energy_range,
+        gti_average=True,
+    )  # Set to True if GTI-based binning
+
+    output.reset_index(drop=True)
+    print("expected", expected)
+    print("output", output)
+    assert_frame_equal(output, expected, check_dtype=False)
+    # assert_series_equal(output["bin_end"], expected["bin_end"], check_dtype=False)
+    # assert_series_equal(output["count_rate"], expected["count_rate"], check_dtype=False)
